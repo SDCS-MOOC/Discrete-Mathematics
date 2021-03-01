@@ -1,0 +1,32 @@
+name: build
+
+on:
+  workflow_dispatch:
+  push:
+    branches-ignore: main
+    paths-ignore:
+      - '**.md'
+      - .gitignore
+  pull_request:
+    branches-ignore: main
+    paths-ignore:
+      - '**.md'
+      - .gitignore
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: SDCS-MOOC/LaTeXMakeAll@v0.11
+        with:
+          root_dir: "."
+          file_glob: "**/main.tex"
+      - uses: actions/upload-artifact@v2
+        with:
+          name: "Slide"
+          path: "**/*-slide.pdf"
+      - uses: actions/upload-artifact@v2
+        with:
+          name: "Handout"
+          path: "**/*-handout.pdf"
